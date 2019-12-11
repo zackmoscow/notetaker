@@ -42,7 +42,6 @@ app.post('/api/notes', (req, res) => {
             text: req.body.text,
         };
         json.push(newNote);
-        console.log(newNote);
         fs.writeFile('db/db.json', JSON.stringify(json), (err) => {
             if (err) throw err;
             res.send('New Note: ' + newNote);
@@ -55,12 +54,13 @@ app.delete('/api/notes/:id', (req, res) => {
         if (err) throw err;
         let deleteNote = req.params.id;
         let json = JSON.parse(data);
-        for (let i = 0; i < json.length; i++) {
-            if (json[i].id === deleteNote) {
-                json.splice(i, 1);
-            };
-        };
-        fs.writeFile('db/db.json', JSON.stringify(json), (err) => {
+        let jsonDelete = json.filter(item => item.id !== deleteNote);
+        // for (let i = 0; i < json.length; i++) {
+        //     if (json[i].id === deleteNote) {
+        //         json.splice(i, 1);
+        //     };
+        // };
+        fs.writeFile('db/db.json', JSON.stringify(jsonDelete), (err) => {
             if (err) throw err;
             res.send('Note Deleted.');
         });
