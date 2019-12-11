@@ -54,6 +54,7 @@ app.delete('/api/notes/:id', (req, res) => {
         if (err) throw err;
         let deleteNote = req.params.id;
         let json = JSON.parse(data);
+        console.log(json);
         let jsonDelete = json.filter(item => item.id !== deleteNote);
         // for (let i = 0; i < json.length; i++) {
         //     if (json[i].id === deleteNote) {
