@@ -9,8 +9,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-let currentID = 0;
-
 // HTML ROUTES
 
 app.get('/', (req, res) => {
@@ -35,14 +33,12 @@ app.post('/api/notes', (req, res) => {
     fs.readFile('db/db.json', (err, data) => {
         if (err) throw err;
         let json = JSON.parse(data);
-        currentID = currentID + 1;
         let newNote = {
-            id: currentID,
+            id: json.length,
             title: req.body.title,
             text: req.body.text,
         };
         json.push(newNote);
-        console.log(newNote);
         fs.writeFile('db/db.json', JSON.stringify(json), (err) => {
             if (err) throw err;
             res.send('New Note: ' + newNote);
@@ -55,8 +51,8 @@ app.delete('/api/notes/:id', (req, res) => {
         if (err) throw err;
         let deleteNote = req.params.id;
         let json = JSON.parse(data);
-        json.forEach((item, i) =>{
-            if (item.id.includes(deleteNote)){ 
+        json.forEach((item, i) => {
+            if (item.id === deleteNote) { 
               json.splice(i, 1);       
             }
         });
